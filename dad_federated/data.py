@@ -10,6 +10,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, Dataset, Subset
 from torchvision import datasets, transforms
+from PIL import Image
 
 
 @dataclass
@@ -35,22 +36,65 @@ class ImageFolderWithIndex(datasets.ImageFolder):
 
 
 class FakeImageDataset(Dataset):
-    def __init__(self, num_samples: int, num_classes: int = 2, image_size: int = 224):
-        self.num_samples = num_samples
-        self.num_classes = num_classes
-        self.image_size = image_size
-        self.transform = transforms.Compose(
-            [
-                transforms.ToTensor(),
-            ]
+    """Synthetic ImageFolder-like dataset for smoke tests.
+
+    Exposes attributes used by ImageFolder: samples, targets, classes.
+    Allows cloning with a different transform but identical labels/indices.
+    """
+
+    def __init__(
+        self,
+        num_samples: int,
+        num_classes: int = 2,
+        image_size: int = 224,
+        transform: transforms.Compose | None = None,
+        labels: List[int] | None = None,
+        seed: int = 123,
+    ):
+        self.num_samples = int(num_samples)
+        self.num_classes = int(num_classes)
+        self.image_size = int(image_size)
+        self.transform = transform
+
+        rng = np.random.default_rng(seed)
+        if labels is None:
+            # Generate deterministic labels
+            labels = rng.integers(low=0, high=num_classes, size=self.num_samples).tolist()
+        self._labels: List[int] = [int(x) for x in labels]
+
+        # Mimic ImageFolder's samples as (path_like, label). Path is dummy here
+        self.samples: List[Tuple[str, int]] = [(str(i), self._labels[i]) for i in range(self.num_samples)]
+        self._classes: List[str] = [f"class-{i}" for i in range(self.num_classes)]
+
+    @property
+    def classes(self) -> List[str]:
+        return self._classes
+
+    @property
+    def targets(self) -> List[int]:
+        return self._labels
+
+    def clone_with_transform(self, transform: transforms.Compose) -> "FakeImageDataset":
+        return FakeImageDataset(
+            num_samples=self.num_samples,
+            num_classes=self.num_classes,
+            image_size=self.image_size,
+            transform=transform,
+            labels=self._labels,
         )
 
     def __len__(self) -> int:
         return self.num_samples
 
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, int]:
-        img = torch.rand(3, self.image_size, self.image_size)
-        label = torch.randint(0, self.num_classes, (1,)).item()
+        # Create a random RGB image as PIL Image so torchvision transforms work
+        img_np = (np.random.rand(self.image_size, self.image_size, 3) * 255).astype(np.uint8)
+        img = Image.fromarray(img_np, mode="RGB")
+        if self.transform is not None:
+            img = self.transform(img)
+        else:
+            img = transforms.ToTensor()(img)
+        label = self._labels[idx]
         return img, label
 
 
@@ -85,7 +129,10 @@ def load_imagefolder_dataset(root: str | Path, image_size: int, use_fake_if_miss
             raise FileNotFoundError(f"Dataset root '{root}' does not exist or is empty.")
         # Fallback to synthetic dataset for smoke tests
         num_classes = 2
-        return FakeImageDataset(1000, num_classes=num_classes, image_size=image_size), FakeImageDataset(200, num_classes=num_classes, image_size=image_size), num_classes
+        num_samples = 1200
+        base = FakeImageDataset(num_samples=num_samples, num_classes=num_classes, image_size=image_size, transform=train_tfms)
+        val_ds = base.clone_with_transform(val_tfms)
+        return base, val_ds, num_classes
 
     full_ds = ImageFolderWithIndex(root=root, transform=train_tfms)
     num_classes = len(full_ds.classes)

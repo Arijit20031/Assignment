@@ -1,0 +1,15 @@
+{
+  "data_root": "/workspace/data/DAD",
+  "num_clients": 5,
+  "train_ratio": 0.8,
+  "val_ratio": 0.2,
+  "noniid_alpha": 0.3,
+  "global_rounds": 1,
+  "local_epochs": 1,
+  "batch_size": 8,
+  "learning_rate": 0.001,
+  "num_workers": 0,
+  "seed": 42,
+  "model_name": "resnet18",
+  "image_size": 224
+}

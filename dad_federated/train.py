@@ -90,18 +90,29 @@ def set_state_dict(model: nn.Module, state: Dict[str, torch.Tensor]) -> None:
     model.load_state_dict(state, strict=True)
 
 
-def weighted_average_states(states_and_weights: Tuple[Dict[str, torch.Tensor], int] | list[Tuple[Dict[str, torch.Tensor], int]]) -> Dict[str, torch.Tensor]:
+def weighted_average_states(
+    states_and_weights: Tuple[Dict[str, torch.Tensor], int] | list[Tuple[Dict[str, torch.Tensor], int]]
+) -> Dict[str, torch.Tensor]:
     if not isinstance(states_and_weights, list):
         states_and_weights = [states_and_weights]
-    total = sum(w for _, w in states_and_weights)
-    assert total > 0
+    total_weight = sum(weight for _, weight in states_and_weights)
+    assert total_weight > 0
 
-    # Initialize accumulators
-    keys = states_and_weights[0][0].keys()
-    avg: Dict[str, torch.Tensor] = {k: torch.zeros_like(states_and_weights[0][0][k]) for k in keys}
+    keys = list(states_and_weights[0][0].keys())
+    averaged: Dict[str, torch.Tensor] = {}
 
-    for state, weight in states_and_weights:
-        for k in keys:
-            avg[k] += state[k] * (weight / total)
+    # For floating tensors, do true weighted average; for integer/bool tensors, take from the max-weight client
+    max_weight_idx = max(range(len(states_and_weights)), key=lambda i: states_and_weights[i][1])
 
-    return avg
+    for key in keys:
+        reference_tensor = states_and_weights[0][0][key]
+        if torch.is_floating_point(reference_tensor) or torch.is_complex(reference_tensor):
+            acc = torch.zeros_like(reference_tensor, dtype=reference_tensor.dtype)
+            for state, weight in states_and_weights:
+                tensor = state[key].to(acc.dtype)
+                acc += tensor * (weight / total_weight)
+            averaged[key] = acc
+        else:
+            averaged[key] = states_and_weights[max_weight_idx][0][key]
+
+    return averaged
