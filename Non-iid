@@ -5513,7 +5513,7 @@
         "        plt.tight_layout()\n",
         "        filename = f'non_iid_distribution_{split}.png'\n",
         "        plt.savefig(filename, dpi=150, bbox_inches='tight')\n",
-        "        print(f\"✓ Visualization saved as '{filename}'\")\n",
+        "        print(f\" Visualization saved as '{filename}'\")\n",
         "        plt.show()\n",
         "\n",
         "    def save_client_data(self, client_data: dict, output_dir: str = './client_data'):\n",
@@ -5541,9 +5541,9 @@
         "            test_path = os.path.join(output_dir, f'client_{client_id}_test.npz')\n",
         "            np.savez_compressed(test_path, **test_data)\n",
         "\n",
-        "            print(f\"  ✓ Client {client_id}: train ({train_data['n_samples']} samples) & test ({test_data['n_samples']} samples)\")\n",
+        "            print(f\"   Client {client_id}: train ({train_data['n_samples']} samples) & test ({test_data['n_samples']} samples)\")\n",
         "\n",
-        "        print(f\"\\n✓ All client data saved successfully!\")\n",
+        "        print(f\"\\ All client data saved successfully!\")\n",
         "\n",
         "\n",
         "# Main execution\n",
@@ -5558,7 +5558,7 @@
         "    # LOAD YOUR I3D DATA HERE\n",
         "    print(\"\\nLoading i3d_feat data...\")\n",
         "\n",
-        "    # Assuming your data is in .npy files within subdirectories of the specified directories\n",
+        "    ,
         "    train_dir = '/content/dad/i3d_feat/training'\n",
         "    test_dir = '/content/dad/i3d_feat/testing'\n",
         "\n",
@@ -5579,13 +5579,13 @@
         "        print(f\"Error: No .npy files found in {train_dir} or its subdirectories.\")\n",
         "    else:\n",
         "        i3d_train = np.vstack([np.load(f, allow_pickle=True) for f in train_files])\n",
-        "        print(f\"  ✓ Loaded train: {i3d_train.shape}\")\n",
+        "        print(f\"   Loaded train: {i3d_train.shape}\")\n",
         "\n",
         "    if not test_files:\n",
         "        print(f\"Error: No .npy files found in {test_dir} or its subdirectories.\")\n",
         "    else:\n",
         "        i3d_test = np.vstack([np.load(f, allow_pickle=True) for f in test_files])\n",
-        "        print(f\"  ✓ Loaded test: {i3d_test.shape}\")\n",
+        "        print(f\"   Loaded test: {i3d_test.shape}\")\n",
         "\n",
         "\n",
         "    # Create non-IID distribution\n",
@@ -5635,15 +5635,15 @@
           "output_type": "stream",
           "name": "stdout",
           "text": [
-            "======================================================================\n",
+            
             "Non-IID Dataset Generation using Feature Distribution Skew\n",
-            "======================================================================\n",
+            
             "\n",
             "Loading i3d_feat data...\n",
-            "  ✓ Loaded train: (128400, 2048)\n",
-            "  ✓ Loaded test: (46600, 2048)\n",
+            "  Loaded train: (128400, 2048)\n",
+            "   Loaded test: (46600, 2048)\n",
             "\n",
-            "======================================================================\n",
+           
             "Training data shape: (128400, 2048)\n",
             "Test data shape: (46600, 2048)\n",
             "Number of clusters: 10\n",
@@ -5675,10 +5675,10 @@
             "    - Test: 6468 samples\n",
             "    - Clusters: [3 6]\n",
             "\n",
-            "======================================================================\n",
+            
             "\n",
             "Generating visualization for train data...\n",
-            "✓ Visualization saved as 'non_iid_distribution_train.png'\n"
+            " Visualization saved as 'non_iid_distribution_train.png'\n"
           ]
         },
         {
@@ -5696,10 +5696,10 @@
           "name": "stdout",
           "text": [
             "\n",
-            "======================================================================\n",
+            
             "\n",
             "Generating visualization for test data...\n",
-            "✓ Visualization saved as 'non_iid_distribution_test.png'\n"
+            " Visualization saved as 'non_iid_distribution_test.png'\n"
           ]
         },
         {
@@ -5717,16 +5717,16 @@
           "name": "stdout",
           "text": [
             "\n",
-            "======================================================================\n",
+          
             "\n",
             "Saving client data to ./client_data...\n",
-            "  ✓ Client 0: train (22001 samples) & test (9620 samples)\n",
-            "  ✓ Client 1: train (29217 samples) & test (11848 samples)\n",
-            "  ✓ Client 2: train (33220 samples) & test (10643 samples)\n",
-            "  ✓ Client 3: train (27062 samples) & test (8021 samples)\n",
-            "  ✓ Client 4: train (16900 samples) & test (6468 samples)\n",
+            "   Client 0: train (22001 samples) & test (9620 samples)\n",
+            "   Client 1: train (29217 samples) & test (11848 samples)\n",
+            "   Client 2: train (33220 samples) & test (10643 samples)\n",
+            "   Client 3: train (27062 samples) & test (8021 samples)\n",
+            "   Client 4: train (16900 samples) & test (6468 samples)\n",
             "\n",
-            "✓ All client data saved successfully!\n",
+            " All client data saved successfully!\n",
             "\n",
             "======================================================================\n",
             "Non-IID Dataset Creation Complete!\n",
@@ -6011,7 +6011,7 @@
         "\n",
         "        plt.tight_layout()\n",
         "        plt.savefig('fedprox_metrics.png', dpi=150, bbox_inches='tight')\n",
-        "        print(\"\\n✓ Metrics plot saved as 'fedprox_metrics.png'\")\n",
+        "        print(\"\\n Metrics plot saved as 'fedprox_metrics.png'\")\n",
         "        plt.show()\n",
         "\n",
         "        # Additional plot: ROC AUC over rounds\n",
@@ -6024,7 +6024,7 @@
         "        ax.set_xticks(rounds)\n",
         "        plt.tight_layout()\n",
         "        plt.savefig('fedprox_roc_auc.png', dpi=150, bbox_inches='tight')\n",
-        "        print(\"✓ ROC AUC plot saved as 'fedprox_roc_auc.png'\")\n",
+        "        print(\" ROC AUC plot saved as 'fedprox_roc_auc.png'\")\n",
         "        plt.show()\n",
         "\n",
         "\n",
@@ -6204,7 +6204,7 @@
         "    def load_data_with_labels(data_dir):\n",
         "        all_features = []\n",
         "        all_labels = []\n",
-        "        label_map = {'negative': 0, 'positive': 1} # Assuming 'negative' and 'positive' are your classes\n",
+        "        label_map = {'negative': 0, 'positive': 1} # Assuming 'negative' and 'positive' are  classes\n",
         "\n",
         "        for root, dirs, files in os.walk(data_dir):\n",
         "            for file in files:\n",
@@ -6254,7 +6254,7 @@
         "            mu=0.01\n",
         "        )\n",
         "\n",
-        "        print(\"\\n✓ All tasks completed successfully!\")"
+        "        print(\"\\n All tasks completed successfully!\")"
       ],
       "metadata": {
         "colab": {
@@ -6270,32 +6270,32 @@
           "output_type": "stream",
           "name": "stdout",
           "text": [
-            "======================================================================\n",
+           
             "FedProx Federated Learning Pipeline\n",
-            "======================================================================\n",
+            
             "\n",
             "Step 1: Loading i3d_feat data...\n",
             "   Train: (128400, 2048), Labels: (128400,)\n",
             "   Test: (46600, 2048), Labels: (46600,)\n",
             "\n",
             "Step 2: Running FedProx...\n",
-            "======================================================================\n",
+            
             "FedProx Federated Learning with Non-IID Data\n",
-            "======================================================================\n",
+            
             "\n",
             "Using device: cpu\n",
             "Input dimension: 2048\n",
             "Number of classes: 2\n",
             "\n",
-            "======================================================================\n",
+           
             "Creating Non-IID Data Distribution\n",
-            "======================================================================\n",
+            
             "Training data shape: (128400, 2048)\n",
             "Test data shape: (46600, 2048)\n",
             "Number of clusters: 10\n",
             "\n",
             "Performing K-Means clustering...\n",
-            "✓ Clustering complete!\n",
+            " Clustering complete!\n",
             "\n",
             "Distributing data to 5 clients...\n",
             "  Client 0: 22001 train, 9620 test samples\n",
@@ -6304,13 +6304,13 @@
             "  Client 3: 27062 train, 8021 test samples\n",
             "  Client 4: 16900 train, 6468 test samples\n",
             "\n",
-            "======================================================================\n",
+            
             "Starting FedProx Training: 10 rounds, 5 epochs per round\n",
-            "======================================================================\n",
+           
             "\n",
-            "======================================================================\n",
+            
             "Round 1/10\n",
-            "======================================================================\n",
+            
             "\n",
             "  Training Client 0...\n",
             "    Client 0 - Epoch 1/5, Loss: 0.6287\n",
@@ -6344,9 +6344,9 @@
             "    AUC-PR: 0.4371\n",
             "    ROC AUC: 0.5814\n",
             "\n",
-            "======================================================================\n",
+           
             "Round 2/10\n",
-            "======================================================================\n",
+            
             "\n",
             "  Training Client 0...\n",
             "    Client 0 - Epoch 1/5, Loss: 0.5393\n",
@@ -6380,9 +6380,9 @@
             "    AUC-PR: 0.3630\n",
             "    ROC AUC: 0.5088\n",
             "\n",
-            "======================================================================\n",
+            
             "Round 3/10\n",
-            "======================================================================\n",
+            
             "\n",
             "  Training Client 0...\n",
             "    Client 0 - Epoch 1/5, Loss: 0.4962\n",
@@ -6416,9 +6416,9 @@
             "    AUC-PR: 0.4093\n",
             "    ROC AUC: 0.5095\n",
             "\n",
-            "======================================================================\n",
+            
             "Round 4/10\n",
-            "======================================================================\n",
+           
             "\n",
             "  Training Client 0...\n",
             "    Client 0 - Epoch 1/5, Loss: 0.5325\n",
@@ -6452,9 +6452,9 @@
             "    AUC-PR: 0.3848\n",
             "    ROC AUC: 0.5035\n",
             "\n",
-            "======================================================================\n",
+           
             "Round 5/10\n",
-            "======================================================================\n",
+            
             "\n",
             "  Training Client 0...\n",
             "    Client 0 - Epoch 1/5, Loss: 0.6184\n",
@@ -6488,9 +6488,9 @@
             "    AUC-PR: 0.3773\n",
             "    ROC AUC: 0.5025\n",
             "\n",
-            "======================================================================\n",
+           
             "Round 6/10\n",
-            "======================================================================\n",
+            
             "\n",
             "  Training Client 0...\n",
             "    Client 0 - Epoch 1/5, Loss: 0.5718\n",
@@ -6524,9 +6524,9 @@
             "    AUC-PR: 0.3431\n",
             "    ROC AUC: 0.5017\n",
             "\n",
-            "======================================================================\n",
+           
             "Round 7/10\n",
-            "======================================================================\n",
+            
             "\n",
             "  Training Client 0...\n",
             "    Client 0 - Epoch 1/5, Loss: 0.5275\n",
@@ -6560,9 +6560,9 @@
             "    AUC-PR: 0.3671\n",
             "    ROC AUC: 0.5027\n",
             "\n",
-            "======================================================================\n",
+            
             "Round 8/10\n",
-            "======================================================================\n",
+            
             "\n",
             "  Training Client 0...\n",
             "    Client 0 - Epoch 1/5, Loss: 0.6296\n",
@@ -6596,9 +6596,9 @@
             "    AUC-PR: 0.3651\n",
             "    ROC AUC: 0.5055\n",
             "\n",
-            "======================================================================\n",
+            
             "Round 9/10\n",
-            "======================================================================\n",
+           
             "\n",
             "  Training Client 0...\n",
             "    Client 0 - Epoch 1/5, Loss: 0.5559\n",
@@ -6632,9 +6632,9 @@
             "    AUC-PR: 0.4333\n",
             "    ROC AUC: 0.5006\n",
             "\n",
-            "======================================================================\n",
+            
             "Round 10/10\n",
-            "======================================================================\n",
+            
             "\n",
             "  Training Client 0...\n",
             "    Client 0 - Epoch 1/5, Loss: 0.5821\n",
@@ -6668,11 +6668,11 @@
             "    AUC-PR: 0.4198\n",
             "    ROC AUC: 0.5009\n",
             "\n",
-            "======================================================================\n",
+            
             "Generating Performance Plots\n",
-            "======================================================================\n",
+            
             "\n",
-            "✓ Metrics plot saved as 'fedprox_metrics.png'\n"
+            " Metrics plot saved as 'fedprox_metrics.png'\n"
           ]
         },
         {
@@ -6707,11 +6707,10 @@
           "name": "stdout",
           "text": [
             "\n",
-            "======================================================================\n",
             "FedProx Training Complete!\n",
-            "======================================================================\n",
+            ,
             "\n",
-            "✓ All tasks completed successfully!\n"
+            " All tasks completed successfully!\n"
           ]
         }
       ]
